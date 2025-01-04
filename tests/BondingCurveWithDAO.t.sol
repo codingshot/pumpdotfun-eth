@@ -111,4 +111,25 @@ contract BondingCurveWithDAOTest is Test {
         uint256 reward = bondingCurve.calculateSellReward(amount);
         assertTrue(reward > 0, "Sell reward calculation failed");
     }
+
+    function testLockedLiquidity() public {
+        uint256 amount = 1000;
+        uint256 maxCost = 10 ether;
+
+        // Deploy a bonding curve with locked liquidity
+        BondingCurveWithDAO lockedBondingCurve = new BondingCurveWithDAO(
+            uniswapRouter,
+            liquidityToken,
+            governance,
+            targetLiquidity,
+            daoQuorum,
+            true // Locked liquidity
+        );
+
+        // Buy tokens to trigger liquidity addition
+        lockedBondingCurve.buy{value: maxCost}(amount, maxCost);
+
+        // Check if liquidity is locked (mocked, as actual Uniswap interaction is not tested here)
+        // This would require a mock or interface to simulate Uniswap behavior
+    }
 } 

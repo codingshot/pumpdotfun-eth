@@ -85,6 +85,7 @@ contract BondingCurveFactory is ReentrancyGuard {
      * @param _governanceToken Address of the governance token for DAO voting in the bonding curve.
      * @param _targetLiquidity Threshold reserve balance to trigger liquidity addition.
      * @param _daoQuorum Initial quorum for the Bonding Curve's DAO (e.g., 5000 = 50%).
+     * @param _lockedLiquidity Boolean indicating whether liquidity should be locked.
      * @return Address of the newly deployed bonding curve contract.
      */
     function deployBondingCurve(
@@ -92,7 +93,8 @@ contract BondingCurveFactory is ReentrancyGuard {
         address _liquidityToken,
         address _governanceToken,
         uint256 _targetLiquidity,
-        uint256 _daoQuorum
+        uint256 _daoQuorum,
+        bool _lockedLiquidity
     ) external returns (address) {
         require(_uniswapRouter != address(0), "Invalid Uniswap router");
         require(_liquidityToken != address(0), "Invalid liquidity token");
@@ -105,7 +107,8 @@ contract BondingCurveFactory is ReentrancyGuard {
             _liquidityToken,
             address(governance),
             _targetLiquidity,
-            _daoQuorum
+            _daoQuorum,
+            _lockedLiquidity
         );
 
         // Track the deployment

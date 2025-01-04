@@ -19,6 +19,7 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
     address public liquidityRecipient; // Address to receive LP tokens
     address public governance; // Shared governance contract
     uint256 public daoQuorum; // Minimum token quorum (in basis points) required for DAO decisions
+    bool public lockedLiquidity;
 
     mapping(address => uint256) public balances; // Tracks token balances for each address
 
@@ -34,7 +35,8 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
         address _liquidityToken,
         address _governance,
         uint256 _targetLiquidity,
-        uint256 _daoQuorum
+        uint256 _daoQuorum,
+        bool _lockedLiquidity
     ) {
         uniswapRouter = _uniswapRouter;
         liquidityToken = _liquidityToken;
@@ -42,6 +44,7 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
         targetLiquidity = _targetLiquidity;
         liquidityRecipient = msg.sender; // Default recipient of LP tokens is the contract owner
         daoQuorum = _daoQuorum; // Initialize DAO quorum
+        lockedLiquidity = _lockedLiquidity; // Initialize locked liquidity
     }
 
     /**
@@ -136,7 +139,7 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
             tokenAmount,
             (tokenAmount * (10000 - _slippageTolerance)) / 10000, // Minimum tokens
             (ethAmount * (10000 - _slippageTolerance)) / 10000,   // Minimum ETH
-            liquidityRecipient,
+            lockedLiquidity ? address(this) : liquidityRecipient, // Lock liquidity if required
             block.timestamp
         );
 

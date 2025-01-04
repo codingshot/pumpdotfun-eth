@@ -74,6 +74,7 @@ This smart contract implements a bonding curve mechanism with dynamic token pric
 - Implements a quadratic bonding curve for dynamic token pricing.
 - **Token Sale Launch**: Tokens are initially sold directly through the bonding curve, allowing users to purchase tokens as soon as the curve is deployed.
 - **Liquidity Addition**: Once a target amount of tokens or ETH is reached, liquidity is automatically added to a DEX like Uniswap, enabling trading on the open market.
+- **Locked Liquidity**: If the `lockedLiquidity` parameter is set to true, the liquidity added to Uniswap is locked, preventing it from being withdrawn.
 - Token prices increase with supply growth, incentivizing early participation.
 - Token sell rewards decrease with supply reduction, discouraging mass sell-offs.
 
