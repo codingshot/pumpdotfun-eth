@@ -5,3 +5,5 @@
 - Check locked liquidity logic
 - check all code coverage
 - make sure governance logic switch from admin on factory and bonding curve contra start with admin and can independelty switch to dao, Make sure dao can vote to swtich back to admin. 
+- make it so you can choose differnet bonding curve claculations and different token sale mechanisms. 
+- add ability set insider allocations for team members with apprioraite vesting
