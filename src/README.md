@@ -72,6 +72,8 @@ This smart contract implements a bonding curve mechanism with dynamic token pric
 
 ### **1. Bonding Curve**
 - Implements a quadratic bonding curve for dynamic token pricing.
+- **Token Sale Launch**: Tokens are initially sold directly through the bonding curve, allowing users to purchase tokens as soon as the curve is deployed.
+- **Liquidity Addition**: Once a target amount of tokens or ETH is reached, liquidity is automatically added to a DEX like Uniswap, enabling trading on the open market.
 - Token prices increase with supply growth, incentivizing early participation.
 - Token sell rewards decrease with supply reduction, discouraging mass sell-offs.
 
@@ -96,7 +98,7 @@ This smart contract implements a bonding curve mechanism with dynamic token pric
 - Fee proposals are subject to DAO voting when in DAO mode.
 
 ### **6. Uniswap Liquidity Integration**
-- Automatically adds liquidity when the reserve balance reaches a target threshold.
+- **Automatic Liquidity Addition**: Liquidity is added to Uniswap when the reserve balance reaches a target threshold, ensuring that the tokens can be traded on the open market.
 - Customizable slippage tolerance for liquidity additions to ensure optimal pricing.
 
 ### **7. Security Features**
@@ -125,18 +127,9 @@ This smart contract implements a bonding curve mechanism with dynamic token pric
      \text{Cost} = \frac{{\left(NewSupply^2 - TotalSupply^2\right) \cdot 1 \text{ ETH}}}{{ReserveRatio \cdot 10000}}
      \]
 
-3. **Receiving Tokens**:
-   - The tokens are minted and sent to your wallet address.
-   - You can check your balance in the `balances` mapping or in your wallet.
-
-4. **Identifying the Token**:
-   - The name and symbol of the token can be retrieved from the contract if it extends an ERC-20 token implementation.
-   - Example (if using ERC-20):
-     ```solidity
-     string tokenName = bondingCurve.name(); // Token name
-     string tokenSymbol = bondingCurve.symbol(); // Token symbol
-     ```
-   - Alternatively, check the contract documentation or deployment parameters for the token details.
+3. **Liquidity Addition**:
+   - Once the reserve balance reaches the target liquidity threshold, the contract automatically adds liquidity to Uniswap, allowing for open market trading.
+   - This process includes slippage protection to ensure optimal pricing.
 
 ---
 
