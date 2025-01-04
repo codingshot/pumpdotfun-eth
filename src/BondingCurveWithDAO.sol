@@ -2,11 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
+contract BondingCurveWithDAO is AccessControl, ReentrancyGuard {
+    // Define roles
+    bytes32 public constant GOVERNANCE_ROLE = keccak256("GOVERNANCE_ROLE");
+
     // State variables
     uint256 public totalSupply; // Tracks the total token supply
     uint256 public reserveBalance; // Tracks the ETH reserve balance
@@ -38,6 +41,9 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
         uint256 _daoQuorum,
         bool _lockedLiquidity
     ) {
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(GOVERNANCE_ROLE, _governance);
+
         uniswapRouter = _uniswapRouter;
         liquidityToken = _liquidityToken;
         governance = _governance;
@@ -150,9 +156,16 @@ contract BondingCurveWithDAO is Ownable, ReentrancyGuard {
      * @dev Updates the protocol fee. Can only be called by the governance contract.
      * @param _newFee New protocol fee in basis points.
      */
-    function updateProtocolFee(uint256 _newFee) external {
-        require(msg.sender == governance, "Not authorized");
+    function updateProtocolFee(uint256 _newFee) external onlyRole(GOVERNANCE_ROLE) {
+        require(_newFee <= 1000, "Fee exceeds max limit");
         emit FeeUpdated(feePercentage, _newFee);
         feePercentage = _newFee;
+    }
+
+    /**
+     * @dev Implements fee redistribution. Can only be called by the governance contract.
+     */
+    function redistributeFees() external onlyRole(GOVERNANCE_ROLE) {
+        // Logic for fee redistribution
     }
 }

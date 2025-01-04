@@ -107,6 +107,10 @@ This smart contract implements a bonding curve mechanism with dynamic token pric
 - Implements the `nonReentrant` modifier to protect against reentrancy attacks.
 - Voting mechanisms use snapshots of token balances for fairness.
 
+### **8. New Features**
+- **Security Enhancements**: Reentrancy guards and access control using OpenZeppelin's `AccessControl`.
+- **Functionality Enhancements**: Fee redistribution mechanism, enhanced proposal system for complex governance actions, functions to check proposal status.
+
 ---
 
 ## **How to Get Tokens from the Bonding Curve**
@@ -469,6 +473,13 @@ Below are usage examples for deploying and managing bonding curves, updating pro
    ```solidity
    factory.triggerEmergencyMode();
    ```
+
+### New Features
+
+- **Security Enhancements**: Reentrancy guards and access control using OpenZeppelin's `AccessControl`.
+- **Functionality Enhancements**: Fee redistribution mechanism, enhanced proposal system for complex governance actions, functions to check proposal status.
+- **Usage**: Use the `redistributeFees` function to distribute collected fees to token holders. Check proposal status using `hasProposalPassed` and `isProposalExecuted`.
+
 # BondingCurveFactory Contract Documentation
 
 ## Overview

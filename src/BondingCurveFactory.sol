@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./Governance.sol";
 import "./BondingCurveWithDAO.sol";
 
@@ -10,7 +11,10 @@ import "./BondingCurveWithDAO.sol";
  * @dev This contract is responsible for deploying and managing bonding curve contracts.
  * It supports both admin-controlled and DAO-based governance modes.
  */
-contract BondingCurveFactory is ReentrancyGuard {
+contract BondingCurveFactory is AccessControl, ReentrancyGuard {
+    // Define roles
+    bytes32 public constant DAO_ROLE = keccak256("DAO_ROLE");
+
     // State variables
     address public admin; // Address of the factory admin
     bool public useDAO; // Toggle to determine if DAO governance is active
@@ -46,6 +50,9 @@ contract BondingCurveFactory is ReentrancyGuard {
         address _daoToken,
         uint256 _initialQuorum
     ) {
+        _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _setupRole(DAO_ROLE, address(governance));
+
         require(_protocolFee <= 1000, "Fee exceeds max limit"); // Maximum fee is 10%
         require(_protocolFeeRecipient != address(0), "Invalid fee recipient");
 
@@ -142,7 +149,7 @@ contract BondingCurveFactory is ReentrancyGuard {
     /**
      * @dev Triggers emergency mode in the shared Governance contract. Only callable by the admin.
      */
-    function triggerEmergencyMode() external onlyAdmin {
+    function triggerEmergencyMode() external onlyRole(DEFAULT_ADMIN_ROLE) {
         governance.triggerEmergency();
         emit EmergencyModeTriggered();
     }

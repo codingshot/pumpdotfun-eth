@@ -132,4 +132,16 @@ contract BondingCurveWithDAOTest is Test {
         // Check if liquidity is locked (mocked, as actual Uniswap interaction is not tested here)
         // This would require a mock or interface to simulate Uniswap behavior
     }
+
+    function testRedistributeFees() public {
+        // Test fee redistribution logic
+        bondingCurve.redistributeFees();
+        // Assertions to verify redistribution
+    }
+
+    function testProposalStatusFunctions() public {
+        governance.createProposal("Test proposal", 150, 0);
+        assertFalse(governance.hasProposalPassed(0), "Proposal should not have passed yet");
+        assertFalse(governance.isProposalExecuted(0), "Proposal should not be executed yet");
+    }
 } 

@@ -109,6 +109,17 @@ contract Governance is ReentrancyGuard {
 
         proposal.executed = true;
     }
+
+    function hasProposalPassed(uint256 _proposalId) external view returns (bool) {
+        Proposal storage proposal = proposals[_proposalId];
+        uint256 totalVotes = proposal.votesFor + proposal.votesAgainst;
+        uint256 quorumThreshold = (ERC20Votes(daoToken).totalSupply() * daoQuorum) / 10000;
+        return proposal.votesFor > proposal.votesAgainst && totalVotes >= quorumThreshold;
+    }
+
+    function isProposalExecuted(uint256 _proposalId) external view returns (bool) {
+        return proposals[_proposalId].executed;
+    }
 }
 
 interface FactoryOrBondingCurve {
