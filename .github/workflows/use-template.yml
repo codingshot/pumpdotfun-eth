@@ -9,6 +9,7 @@ jobs:
     # We only run this action when the repository isn't the template repository. References:
     # - https://docs.github.com/en/actions/learn-github-actions/contexts
     # - https://docs.github.com/en/actions/learn-github-actions/expressions
+    timeout-minutes: 60
     if: ${{ !github.event.repository.is_template }}
     permissions: "write-all"
     runs-on: "ubuntu-latest"
